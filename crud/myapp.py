@@ -30,4 +30,19 @@ def post_data(id = None):
     data = r.json()
     print(data)
 
-post_data()
+# post_data()
+
+def update_data(id = None):
+    data = {
+        "id": 3,
+        'name': 'shaira',
+        'city': 'noakhali'
+    }
+    
+    json_data = json.dumps(data)
+
+    r = requests.put(url = URL, data =json_data)
+    data = r.json()
+    print(data)
+
+update_data()
