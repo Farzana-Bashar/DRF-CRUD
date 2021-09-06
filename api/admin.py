@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .model import Student
+from .models import Student
 
 # Register your models here.
 
