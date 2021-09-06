@@ -14,4 +14,4 @@ def get_data(id = None):
     data = r.json()
     print(data)
 
-get_data(1)
+get_data()
