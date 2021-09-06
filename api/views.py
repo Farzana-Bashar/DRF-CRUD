@@ -4,7 +4,7 @@ from rest_framework.parsers import JSONParser
 from .models import Student
 from .serializers import StudentSerializer
 from rest_framework.renderers import JSONRenderer
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -58,4 +58,18 @@ def student_api(request):
         else:
             json_data = JSONRenderer().render(serializer.errors)
             return HttpResponse(json_data, content_type = 'application/json')
+        
+    
+    if request.method == 'DELETE':
+        json_data = request.body
+        stream = io.BytesIO(json_data)
+        pythondata = JSONParser().parse(stream)
+        id = pythondata.get('id')
+        stu = Student.objects.get(id=id)
+        stu.delete()
+
+        res = {'msg': 'data deleted!! '}
+        # json_data = JSONRenderer().render(res)
+        # return HttpResponse(json_data, content_type = 'application/json')
+        return JsonResponse(res, safe = False)
 

@@ -16,3 +16,5 @@ class StudentSerializer(serializers.Serializer):
 
         instance.save()
         return instance
+    
+    
