@@ -1,5 +1,12 @@
+# Basic installation
+
+```pip3 install django```
+```pip3 install djangorestframework```
+
 # DRF-CRUD
 ``` django-admin startproject crud```
+
+``` python3 -m django startproject DjangoRestApisPostgreSQL```    #alternative, where djangoadmin is not working
 
 ```cd crud```
 
@@ -9,9 +16,9 @@
 
 ### create model in models.py
 
-```python3 manage.py makemigrations```
+```python3 manage.py makemigrations api```
 
-```python3 manage.py migrate```
+```python3 manage.py migrate api```
 
 ### Make super user
 ```python3 manage.py createsuperuser```
