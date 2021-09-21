@@ -1,6 +1,9 @@
 name: Pylint
 
-on: [push]
+on:
+  push:
+    branches: [ master ]
+
 
 jobs:
   build:
@@ -28,3 +31,10 @@ jobs:
       with:
         name: pylint report
         path: pylint.txt
+    -name: Build and Push Docker Image
+    uses: mr-smithers-excellent/docker-build-push@v5
+      with:
+        image: farzanabashar/django-crud
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
