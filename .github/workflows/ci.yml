@@ -38,7 +38,7 @@ jobs:
     #     registry: docker.io
     #     username: ${{ secrets.DOCKER_USERNAME }}
     #     password: ${{ secrets.DOCKER_PASSWORD }}
-    - run: docker-compose build
+    - run: docker build -t ecr-drf-crud .
     - run: docker images
     - name: Push to ECR
       id: ecr
@@ -47,4 +47,4 @@ jobs:
         access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         region: us-east-2
-        image: ecr-drf-crud
+        image: ecr-drf-crud: 0.01
