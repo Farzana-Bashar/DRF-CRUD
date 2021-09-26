@@ -11,17 +11,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install pylint
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Checkout
+      uses: actions/checkout@v2
+    # - name: Set up Python 3.9
+    #   uses: actions/setup-python@v2
+    #   with:
+    #     python-version: 3.9
+    # - name: Install dependencies
+    #   run: |
+    #     python -m pip install --upgrade pip
+    #     pip install -r requirements.txt
+    #     pip install pylint
+    #     if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     # - name: Analysing the code with pylint
     #   run: |
     #     python -m pylint --fail-under=10 `find -regextype egrep -regex '(.*.py)$'` |
@@ -38,13 +39,27 @@ jobs:
     #     registry: docker.io
     #     username: ${{ secrets.DOCKER_USERNAME }}
     #     password: ${{ secrets.DOCKER_PASSWORD }}
-    - run: docker build -t ecr-drf-crud:0.01 .
-    - run: docker images
-    - name: Push to ECR
-      id: ecr
-      uses: jwalton/gh-ecr-push@v1
+
+     - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
       with:
-        access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        region: us-east-2
-        image: ecr-drf-crud:0.01
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-south-1
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push the image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ secrets.REPO_NAME }}
+        IMAGE_TAG: ${{ github.sha }}-${{ github.run_number }}
+      run: |
+        # Build a docker container and push it to ECR 
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        echo "Pushing image to ECR..."
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
