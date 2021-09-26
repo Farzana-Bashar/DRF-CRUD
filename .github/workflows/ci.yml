@@ -30,7 +30,7 @@ jobs:
     #   uses: actions/upload-artifact@v2
     #   with:
     #     name: pylint report
-        path: pylint.txt
+    #     path: pylint.txt
     # - name: Build and Push Docker Image
     #   uses: mr-smithers-excellent/docker-build-push@v5
     #   with:
