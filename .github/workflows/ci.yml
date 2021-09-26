@@ -22,23 +22,23 @@ jobs:
         pip install -r requirements.txt
         pip install pylint
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Analysing the code with pylint
-      run: |
-        python -m pylint --fail-under=10 `find -regextype egrep -regex '(.*.py)$'` |
-        tee pylint.txt
-    - name: Upload pylint.txt as artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: pylint report
+    # - name: Analysing the code with pylint
+    #   run: |
+    #     python -m pylint --fail-under=10 `find -regextype egrep -regex '(.*.py)$'` |
+    #     tee pylint.txt
+    # - name: Upload pylint.txt as artifact
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: pylint report
         path: pylint.txt
-    - name: Build and Push Docker Image
-      uses: mr-smithers-excellent/docker-build-push@v5
-      with:
-        image: farzanabashar/django-crud
-        registry: docker.io
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-    - run: docker-compose build && docker-compose up
+    # - name: Build and Push Docker Image
+    #   uses: mr-smithers-excellent/docker-build-push@v5
+    #   with:
+    #     image: farzanabashar/django-crud
+    #     registry: docker.io
+    #     username: ${{ secrets.DOCKER_USERNAME }}
+    #     password: ${{ secrets.DOCKER_PASSWORD }}
+    - run: docker-compose build
     - name: Push to ECR
       id: ecr
       uses: jwalton/gh-ecr-push@v1
