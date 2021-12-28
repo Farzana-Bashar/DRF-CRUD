@@ -7,4 +7,5 @@ metadata:
 spec:
   containers:
   - name: Django-crud
-    image: 
+    image: farzanabashar/django-crud
+    
